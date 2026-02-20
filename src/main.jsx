@@ -8,7 +8,7 @@ import Dashboard from "./components/layout/Dashboard.jsx";
 import Homepage from "./pages/dashboard/Homepage.jsx";
 import RegisterStudentPage from "./pages/dashboard/RegisterStudent.jsx";
 import Login from "./features/auth/Login.jsx";
-import { AuthProvider } from "./contexts/AuthProvider.jsx";
+import AuthProvider from "./contexts/AuthProvider.jsx";
 
 const router = createBrowserRouter([
   {

@@ -1,10 +1,38 @@
-import { Link } from 'react-router-dom';
-import ButtonAccept from '../../components/ui/ButtonAccept';
+import { Link } from "react-router-dom";
+import ButtonAccept from "../../components/ui/ButtonAccept";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import saveStundent from "../../services/saveStudent";
+import ValidationMessage from "../../components/ui/ValidationMessage";
 
 const RegisterStudent = () => {
+  const [serverError, setServerError] = useState("");
+  const [isloading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleRegister = async (data) => {
+    setIsLoading(true);
+    setServerError("");
+
+    try {
+      await saveStundent(data);
+    } catch (error) {
+      setServerError(
+        error.message ||
+          "Error al registrar el estudiante, por favor intente de nuevo.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(handleRegister)}>
       <div className="space-y-12">
         <div className="border-b border-white/10 pb-12">
           <h2 className="text-base/7 font-semibold text-white">
@@ -14,6 +42,7 @@ const RegisterStudent = () => {
             Agregar nuevo alumno al sistema, por favor completa la siguiente
             información.
           </p>
+          {serverError && <ValidationMessage message={serverError} />}
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-full">
@@ -24,11 +53,21 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="name"
-                    name="name"
                     type="text"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("name", {
+                      required: "Ingrese el nombre del alumno",
+                      pattern: {
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "El nombre solo puede contener letras y espacios",
+                      },
+                    })}
                   />
                 </div>
+                {errors.name && (
+                  <ValidationMessage message={errors.name.message} />
+                )}
               </div>
             </div>
 
@@ -40,11 +79,21 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="curp"
-                    name="curp"
                     type="text"
-                    className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    maxLength={18}
+                    className="uppercase block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("curp", {
+                      required: "Ingrese el CURP del alumno",
+                      pattern: {
+                        value: /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/,
+                        message: "El CURP debe tener el formato correcto",
+                      },
+                    })}
                   />
                 </div>
+                {errors.curp && (
+                  <ValidationMessage message={errors.curp.message} />
+                )}
               </div>
             </div>
 
@@ -56,11 +105,21 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="last-nameP"
-                    name="last-nameP"
                     type="text"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("lastNameP", {
+                      required: "Ingrese el apellido paterno del alumno",
+                      pattern: {
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "El apellido paterno solo puede contener letras y espacios",
+                      },
+                    })}
                   />
                 </div>
+                {errors.lastNameP && (
+                  <ValidationMessage message={errors.lastNameP.message} />
+                )}
               </div>
             </div>
 
@@ -72,11 +131,21 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="last-nameM"
-                    name="last-nameM"
                     type="text"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("lastNameM", {
+                      required: "Ingrese el apellido materno del alumno",
+                      pattern: {
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "El apellido materno solo puede contener letras y espacios",
+                      },
+                    })}
                   />
                 </div>
+                {errors.lastNameM && (
+                  <ValidationMessage message={errors.lastNameM.message} />
+                )}
               </div>
             </div>
 
@@ -86,8 +155,18 @@ const RegisterStudent = () => {
               </label>
               <div className="mt-2">
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
-                  <input type="date" name="birthdate" id="birthdate" className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6" />
+                  <input
+                    type="date"
+                    id="birthdate"
+                    className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("birthdate", {
+                      required: "Ingrese la fecha de nacimiento del alumno",
+                    })}
+                  />
                 </div>
+                {errors.birthdate && (
+                  <ValidationMessage message={errors.birthdate.message} />
+                )}
               </div>
             </div>
 
@@ -99,11 +178,24 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="institutional-email"
-                    name="institutional-email"
                     type="email"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("institutionalEmail", {
+                      required: "Ingrese el correo institucional del alumno",
+                      pattern: {
+                        value:
+                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        message:
+                          "El correo institucional debe tener el formato correcto",
+                      },
+                    })}
                   />
                 </div>
+                {errors.institutionalEmail && (
+                  <ValidationMessage
+                    message={errors.institutionalEmail.message}
+                  />
+                )}
               </div>
             </div>
 
@@ -115,11 +207,21 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="nss"
-                    name="nss"
                     type="text"
+                    maxLength={11}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("nss", {
+                      required: "Ingrese el N.S.S. del alumno",
+                      pattern: {
+                        value: /^\d{11}$/,
+                        message: "El N.S.S. debe tener 11 dígitos",
+                      },
+                    })}
                   />
                 </div>
+                {errors.nss && (
+                  <ValidationMessage message={errors.nss.message} />
+                )}
               </div>
             </div>
 
@@ -131,11 +233,21 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="cellphone"
-                    name="cellphone"
                     type="tel"
+                    maxLength={10}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("cel", {
+                      required: "Ingrese el número de celular del alumno",
+                      pattern: {
+                        value: /^\d{10}$/,
+                        message: "El número de celular debe tener 10 dígitos",
+                      },
+                    })}
                   />
                 </div>
+                {errors.cel && (
+                  <ValidationMessage message={errors.cel.message} />
+                )}
               </div>
             </div>
           </div>
@@ -157,9 +269,11 @@ const RegisterStudent = () => {
               <div className="mt-2">
                 <div className="grid grid-cols-1">
                   <select
-                    name="bloodType"
                     id="bloodType"
                     className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pr-8 pl-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                    {...register("bloodType", {
+                      required: "Seleccione el tipo de sangre del alumno",
+                    })}
                   >
                     <option value={"A+"}>A+</option>
                     <option value={"A-"}>A-</option>
@@ -173,6 +287,9 @@ const RegisterStudent = () => {
                     </option>
                   </select>
                 </div>
+                {errors.bloodType && (
+                  <ValidationMessage message={errors.bloodType.message} />
+                )}
               </div>
             </div>
 
@@ -184,58 +301,72 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="weight"
-                    name="weight"
-                    type="number"
+                    type="text"
+                    maxLength={3}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("weight", {
+                      required: "Ingrese el peso del alumno",
+                      pattern: {
+                        value: /^\d{3}$/,
+                        message: "El peso debe ser un número válido",
+                      },
+                    })}
                   />
                 </div>
+                {errors.weight && (
+                  <ValidationMessage message={errors.weight.message} />
+                )}
               </div>
             </div>
 
             <div className="sm:col-span-2">
               <label className="block text-sm/6 font-medium text-white">
-                Talla (cm)
+                Estatura (cm)
               </label>
               <div className="mt-2">
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="height"
-                    name="height"
-                    type="number"
+                    type="text"
+                    maxLength={3}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("height", {
+                      required: "Ingrese la talla del alumno",
+                      pattern: {
+                        value: /^\d{3}$/,
+                        message: "La talla debe ser un número válido",
+                      },
+                    })}
                   />
                 </div>
+                {errors.height && (
+                  <ValidationMessage message={errors.height.message} />
+                )}
               </div>
             </div>
 
             <div className="sm:col-span-full">
-              <label
-                className="block text-sm/6 font-medium text-white"
-              >
+              <label className="block text-sm/6 font-medium text-white">
                 Condiciones Médicas
               </label>
               <div className="mt-2">
-                <textarea 
-                name="medicalConditions"
-                id="medicalConditions"
-                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-
+                <textarea
+                  name="medicalConditions"
+                  id="medicalConditions"
+                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 ></textarea>
               </div>
             </div>
 
             <div className="sm:col-span-full">
-              <label
-                className="block text-sm/6 font-medium text-white"
-              >
-                Alegias a Medicamentos
+              <label className="block text-sm/6 font-medium text-white">
+                Alergias a Medicamentos
               </label>
               <div className="mt-2">
-                <textarea 
-                name="allergies"
-                id="allergies"
-                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-
+                <textarea
+                  name="allergies"
+                  id="allergies"
+                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 ></textarea>
               </div>
             </div>
@@ -251,7 +382,6 @@ const RegisterStudent = () => {
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
             <div className="sm:col-span-4">
               <label className="block text-sm/6 font-medium text-white">
                 Nombre Completo
@@ -260,11 +390,22 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="nameP"
-                    name="nameP"
                     type="text"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("nameP", {
+                      required:
+                        "Ingrese el nombre completo del padre, madre o tutor",
+                      pattern: {
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "El nombre completo solo puede contener letras y espacios",
+                      },
+                    })}
                   />
                 </div>
+                {errors.nameP && (
+                  <ValidationMessage message={errors.nameP.message} />
+                )}
               </div>
             </div>
 
@@ -276,11 +417,23 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="relationship"
-                    name="relationship"
                     type="text"
+                    maxLength={7}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("relationship", {
+                      required:
+                        "Ingrese el parentesco del padre, madre o tutor",
+                      pattern: {
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "El parentesco solo puede contener letras y espacios",
+                      },
+                    })}
                   />
                 </div>
+                {errors.relationship && (
+                  <ValidationMessage message={errors.relationship.message} />
+                )}
               </div>
             </div>
 
@@ -292,11 +445,21 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="phone"
-                    name="phone"
                     type="tel"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("phone", {
+                      required: "Ingrese el número de teléfono de emergencia",
+                      pattern: {
+                        value: /^\d{10}$/,
+                        message:
+                          "El número de teléfono de emergencia debe tener 10 dígitos",
+                      },
+                    })}
                   />
                 </div>
+                {errors.phone && (
+                  <ValidationMessage message={errors.phone.message} />
+                )}
               </div>
             </div>
 
@@ -308,11 +471,20 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="phone2"
-                    name="phone2"
                     type="tel"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("phone2", {
+                      pattern: {
+                        value: /^\d{10}$/,
+                        message:
+                          "El número de teléfono de emergencia debe tener 10 dígitos",
+                      },
+                    })}
                   />
                 </div>
+                {errors.phone2 && (
+                  <ValidationMessage message={errors.phone2.message} />
+                )}
               </div>
             </div>
 
@@ -324,28 +496,42 @@ const RegisterStudent = () => {
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
                   <input
                     id="emailP"
-                    name="emailP"
                     type="email"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("emailP", {
+                      pattern: {
+                        value:
+                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        message:
+                          "El correo personal debe tener el formato correcto",
+                      },
+                    })}
                   />
                 </div>
+                {errors.emailP && (
+                  <ValidationMessage message={errors.emailP.message} />
+                )}
               </div>
             </div>
-
-            
           </div>
         </div>
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
         <Link to="/">
-          <button type="button" className="text-sm/6 font-semibold text-white hover:text-gray-400 font-sans transition-colors">
+          <button
+            type="button"
+            className="text-sm/6 font-semibold text-white hover:text-gray-400 font-sans transition-colors"
+          >
             Cancelar
           </button>
         </Link>
-        <Link to="/homepage">
-          <ButtonAccept text={"Registrar Alumno"}/>
-        </Link>
+
+        <ButtonAccept
+          text={"Registrar Alumno"}
+          type="submit"
+          disabled={isloading}
+        />
       </div>
     </form>
   );

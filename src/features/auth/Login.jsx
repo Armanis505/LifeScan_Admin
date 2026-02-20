@@ -1,6 +1,5 @@
 import LifeScanTitle from "../../components/ui/LifeScanTitle";
 import ValidationMessage from "../../components/ui/ValidationMessage";
-import Navbar from "../../components/layout/dashboard/Navbar";
 import ButtonAccept from "../../components/ui/ButtonAccept";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
