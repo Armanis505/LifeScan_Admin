@@ -1,4 +1,24 @@
 {
-  "usuarios": [],
+  "usuarios": [
+    {
+      "id": "3ea0",
+      "name": "Juanchotron",
+      "curp": "SALG080620HBSLMVA6",
+      "lastNameP": "Piña",
+      "lastNameM": "González",
+      "birthdate": "2026-02-07",
+      "institutionalEmail": "jaime@mail.ent",
+      "nss": "12312341235",
+      "cel": "7617263612",
+      "bloodType": "O-",
+      "weight": "67",
+      "height": "167",
+      "nameP": "Juan carlos Avilés Meza",
+      "relationship": "Madre",
+      "phone": "6712312312",
+      "phone2": "7891728037",
+      "emailP": "juancho.exe@mail.nea"
+    }
+  ],
   "configuracion": {}
 }

@@ -110,7 +110,7 @@ const RegisterStudent = () => {
                     {...register("lastNameP", {
                       required: "Ingrese el apellido paterno del alumno",
                       pattern: {
-                        value: /^[A-Za-z\s]+$/,
+                        value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s'-]+$/,
                         message:
                           "El apellido paterno solo puede contener letras y espacios",
                       },
@@ -136,7 +136,7 @@ const RegisterStudent = () => {
                     {...register("lastNameM", {
                       required: "Ingrese el apellido materno del alumno",
                       pattern: {
-                        value: /^[A-Za-z\s]+$/,
+                        value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s'-]+$/,
                         message:
                           "El apellido materno solo puede contener letras y espacios",
                       },
@@ -282,7 +282,7 @@ const RegisterStudent = () => {
                     <option value={"AB+"}>AB+</option>
                     <option value={"AB-"}>AB-</option>
                     <option value={"O+"}>O+</option>
-                    <option value={"O-"} selected>
+                    <option value={"O-"} defaultValue={true}>
                       O-
                     </option>
                   </select>
@@ -307,7 +307,7 @@ const RegisterStudent = () => {
                     {...register("weight", {
                       required: "Ingrese el peso del alumno",
                       pattern: {
-                        value: /^\d{3}$/,
+                        value: /^\d+$/,
                         message: "El peso debe ser un número válido",
                       },
                     })}
@@ -333,7 +333,7 @@ const RegisterStudent = () => {
                     {...register("height", {
                       required: "Ingrese la talla del alumno",
                       pattern: {
-                        value: /^\d{3}$/,
+                        value: /^\d+$/,
                         message: "La talla debe ser un número válido",
                       },
                     })}
@@ -396,7 +396,7 @@ const RegisterStudent = () => {
                       required:
                         "Ingrese el nombre completo del padre, madre o tutor",
                       pattern: {
-                        value: /^[A-Za-z\s]+$/,
+                        value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s'-]+$/,
                         message:
                           "El nombre completo solo puede contener letras y espacios",
                       },
@@ -446,6 +446,7 @@ const RegisterStudent = () => {
                   <input
                     id="phone"
                     type="tel"
+                    maxLength={10}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                     {...register("phone", {
                       required: "Ingrese el número de teléfono de emergencia",
@@ -472,6 +473,7 @@ const RegisterStudent = () => {
                   <input
                     id="phone2"
                     type="tel"
+                    maxLength={10}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
                     {...register("phone2", {
                       pattern: {
