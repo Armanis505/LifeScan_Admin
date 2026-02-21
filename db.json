@@ -1,5 +1,5 @@
 {
-  "usuarios": [
+  "students": [
     {
       "id": "3ea0",
       "name": "Juanchotron",
@@ -18,6 +18,20 @@
       "phone": "6712312312",
       "phone2": "7891728037",
       "emailP": "juancho.exe@mail.nea"
+    }
+  ],
+  "admins": [
+    {
+      "id": "ls-007",
+      "nc": "23303050620216",
+      "name": "Juanchotron",
+      "password": "admin123"
+    },
+    {
+      "id": "ls-009",
+      "nc": "23303050620217",
+      "name": "Juanchotron",
+      "password": "jaimeroy"
     }
   ],
   "configuracion": {}

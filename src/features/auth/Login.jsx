@@ -6,12 +6,18 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthProvider";
 import authUser from "../../services/loginValidator";
 import { Navigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const [serverError, setServerError] = useState("");
   const [isloading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const auth = useAuth();
+
+  const viewPassword = () => {
+    setShowPassword((show) => !show);
+  };
 
   const {
     register,
@@ -29,7 +35,11 @@ const Login = () => {
 
     try {
       await authUser(data);
-      auth.setIsAuthenticated(true);
+      setTimeout(() => {
+        localStorage.setItem("isLogin", true);
+        const isLogin = localStorage.getItem("isLogin");
+        auth.setIsAuthenticated(isLogin);
+      }, 1000);
     } catch (error) {
       setServerError(
         error.message || "Error de autenticación, por favor intente de nuevo.",
@@ -90,19 +100,24 @@ const Login = () => {
                   ¿Olvidaste tu contraseña?
                 </p>
               </div>
-              <input
-                type="password"
-                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all placeholder-slate-500"
-                placeholder="••••••••"
-                maxLength={8}
-                {...register("password", {
-                  required: "Ingrese su contraseña",
-                  pattern: {
-                    value: /^.{8}$/,
-                    message: "La contraseña debe tener 8 caracteres",
-                  },
-                })}
-              />
+              <div className="relative w-full">
+                <input
+                  type={showPassword ? "password" : "text"}
+                  className="w-full pr-10 px-4 py-3 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all placeholder-slate-500"
+                  placeholder="Ingrese su contraseña"
+                  maxLength={8}
+                  {...register("password", {
+                    required: "Ingrese su contraseña",
+                    pattern: {
+                      value: /^.{8}$/,
+                      message: "La contraseña debe tener exactamente 8 caracteres",
+                    },
+                  })}
+                />
+                  <button type="button" onClick={viewPassword} className="absolute inset-y-0 right-3">
+                    {showPassword ? <EyeOff size={30} color="gray" /> : <Eye size={30} color="gray" />}
+                  </button>
+              </div>
               {errors.password && (
                 <ValidationMessage message={errors.password.message} />
               )}

@@ -26,13 +26,22 @@ const NotificationModal = () => {
         <div className="fixed inset-0 flex w-screen items-center justify-end mb-70 p-8">
           <DialogPanel className="w-96 space-y-4 border bg-slate-700 text-slate-200 p-3 rounded-2xl">
             <div className="flex justify-between">
-              <DialogTitle className="text-slate-200">Notificaciones</DialogTitle>
-              <X text="Cerrar" onClick={() => setIsOpen(false)} className="cursor-pointer hover:text-slate-400"/>
+              <DialogTitle className="text-slate-200">
+                Notificaciones
+              </DialogTitle>
+              <X
+                text="Cerrar"
+                onClick={() => setIsOpen(false)}
+                className="cursor-pointer hover:text-slate-400"
+              />
             </div>
             <div className="border-b border-slate-300"></div>
-            <Description><strong>Notificación 1 </strong></Description>
-            <Description><strong>Notificación 2 </strong></Description>
-            
+            <Description>
+              <strong>Notificación 1 </strong>
+            </Description>
+            <Description>
+              <strong>Notificación 2 </strong>
+            </Description>
           </DialogPanel>
         </div>
       </Dialog>

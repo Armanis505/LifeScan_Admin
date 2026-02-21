@@ -9,6 +9,7 @@ import Homepage from "./pages/dashboard/Homepage.jsx";
 import RegisterStudentPage from "./pages/dashboard/RegisterStudent.jsx";
 import Login from "./features/auth/Login.jsx";
 import AuthProvider from "./contexts/AuthProvider.jsx";
+import StudentsTable from "./pages/dashboard/StudentsTable.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/register-student",
         element: <Dashboard children={<RegisterStudentPage />} />,
+      },
+      {
+        path: "/students-table",
+        element: <Dashboard children={<StudentsTable />} />,
       },
       {
         path: "/history",

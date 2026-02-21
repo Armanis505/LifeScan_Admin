@@ -1,18 +1,24 @@
 import { Link, useLocation } from "react-router-dom";
-import { Users, ClipboardList, Settings, LogOut } from "lucide-react";
+import { Users, UserPen , ClipboardList, Settings, LogOut } from "lucide-react";
 import LifeScanTitle from "../../ui/LifeScanTitle";
 import { useAuth } from "../../../contexts/AuthProvider";
-import { LogOut as LogOutService } from "../../../services/loginValidator";
 
 const Sidebar = () => {
   const auth = useAuth();
-
   const location = useLocation();
 
   const menuItems = [
-    { name: "Registrar Alumno", path: "/register-student", icon: Users },
+    { name: "Registrar Alumno", path: "/register-student", icon: UserPen },
+    { name: "Tabla de Alumnos", path: "/students-table", icon: Users },
     { name: "Historial de escaneos", path: "/history", icon: ClipboardList },
   ];
+
+  const handleLogout = () => {
+    setTimeout(() => {
+      localStorage.removeItem("isLogin");
+      auth.setIsAuthenticated(false);
+    }, 1000);
+  };
 
   return (
     <div className="flex flex-col h-screen w-64 bg-slate-900 text-slate-300 border-r border-slate-800">
@@ -60,9 +66,7 @@ const Sidebar = () => {
         <button
           type="submit"
           className="flex items-center gap-3 w-full px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-colors cursor-pointer"
-          onClick={
-            () => { LogOutService().then(() => auth.setIsAuthenticated(false)); }
-          }
+          onClick={handleLogout}
         >
           <LogOut size={20} />
           <span className="font-medium">Cerrar Sesión</span>
