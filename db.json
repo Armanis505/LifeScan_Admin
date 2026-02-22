@@ -3,6 +3,7 @@
     {
       "id": "3ea0",
       "name": "Juanchotron",
+      "nc": "23303050620217",
       "curp": "SALG080620HBSLMVA6",
       "lastNameP": "Piña",
       "lastNameM": "González",
@@ -13,11 +14,45 @@
       "bloodType": "O-",
       "weight": "67",
       "height": "167",
-      "nameP": "Juan carlos Avilés Meza",
-      "relationship": "Madre",
-      "phone": "6712312312",
-      "phone2": "7891728037",
-      "emailP": "juancho.exe@mail.nea"
+      "emergencyContact": {
+        "name": "Juan carlos Avilés Meza",
+        "relationship": "Madre",
+        "phone": "6712312312",
+        "phone2": "7891728037",
+        "emailP": "juancho.exe@mail.nea"
+      },
+      "medicalConditions": [],
+      "allergies": []
+    },
+    {
+      "id": "f3e0",
+      "name": "Manuel de Jesús",
+      "curp": "SALG080620HBSLMVA6",
+      "nc": "23303050620246",
+      "lastNameP": "Moreno",
+      "lastNameM": "Meza",
+      "birthdate": "2026-01-07",
+      "institutionalEmail": "moreneito3000@mail.asd",
+      "nss": "46465465465",
+      "cel": "7874467646",
+      "bloodType": "AB-",
+      "weight": "67",
+      "height": "167",
+      "emergencyContact": {
+        "name": "juancho",
+        "relationship": "hijop",
+        "phone": "4446546545",
+        "phone2": "6456456456",
+        "emailP": "jaime.asd@juancho.net"
+      },
+      "medicalConditions": [
+        "jaime",
+        "Gastritis",
+        "epatitis A"
+      ],
+      "allergies": [
+        "paracetamol"
+      ]
     }
   ],
   "admins": [
@@ -29,8 +64,8 @@
     },
     {
       "id": "ls-009",
-      "nc": "23303050620217",
-      "name": "Juanchotron",
+      "nc": "23303050620219",
+      "name": "Jaimico",
       "password": "jaimeroy"
     }
   ],

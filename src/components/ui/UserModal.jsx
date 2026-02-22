@@ -46,7 +46,6 @@ const UserModal = ({ nc, name, institution, role }) => {
               <strong>Rol: </strong>
               {role}
             </Description>
-            <p>Tingarrerra.</p>
           </DialogPanel>
         </div>
       </Dialog>

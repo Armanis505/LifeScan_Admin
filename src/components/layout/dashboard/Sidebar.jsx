@@ -8,8 +8,8 @@ const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { name: "Registrar Alumno", path: "/register-student", icon: UserPen },
     { name: "Tabla de Alumnos", path: "/students-table", icon: Users },
+    { name: "Registrar Alumno", path: "/register-student", icon: UserPen },
     { name: "Historial de escaneos", path: "/history", icon: ClipboardList },
   ];
 
@@ -24,7 +24,7 @@ const Sidebar = () => {
     <div className="flex flex-col h-screen w-64 bg-slate-900 text-slate-300 border-r border-slate-800">
       <Link to="/homepage">
         <div className="p-6 flex items-center gap-3 hover:bg-slate-800 rounded-xl transition-colors">
-          <LifeScanTitle size="text-xl" />
+          <LifeScanTitle size="text-2xl" />
         </div>
       </Link>
 

@@ -4,10 +4,47 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import saveStundent from "../../services/saveStudent";
 import ValidationMessage from "../../components/ui/ValidationMessage";
+import { X } from "lucide-react";
 
 const RegisterStudent = () => {
   const [serverError, setServerError] = useState("");
   const [isloading, setIsLoading] = useState(false);
+
+  const [allergyItems, setAllergyItems] = useState([]);
+  const [allergyInputValue, setAllergyInputValue] = useState("");
+
+  const [conditionItems, setConditionItems] = useState([]);
+  const [conditionInputValue, setConditionInputValue] = useState("");
+
+  const addAllergy = () => {
+    const cleanValue = allergyInputValue.trim();
+
+    if (!cleanValue) {
+      return;
+    }
+    if (allergyItems.includes(cleanValue)) {
+      const message = <ValidationMessage message={"Este elemento ya existe"} />;
+      return message;
+    }
+
+    setAllergyItems([...allergyItems, cleanValue]);
+    setAllergyInputValue("");
+  };
+
+  const addCondition = () => {
+    const cleanValue = conditionInputValue.trim();
+
+    if (!cleanValue) {
+      return;
+    }
+    if (conditionItems.includes(cleanValue)) {
+      const message = <ValidationMessage message={"Este elemento ya existe"} />;
+      return message;
+    }
+
+    setConditionItems([...conditionItems, cleanValue]);
+    setConditionInputValue("");
+  };
 
   const {
     register,
@@ -20,7 +57,13 @@ const RegisterStudent = () => {
     setServerError("");
 
     try {
-      await saveStundent(data);
+      const finalData = {
+        ...data,
+        medicalConditions: conditionItems,
+        allergies: allergyItems
+      } 
+      await saveStundent(finalData);
+      location.reload();
     } catch (error) {
       setServerError(
         error.message ||
@@ -58,7 +101,7 @@ const RegisterStudent = () => {
                     {...register("name", {
                       required: "Ingrese el nombre del alumno",
                       pattern: {
-                        value: /^[A-Za-z\s]+$/,
+                        value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s'-]+$/,
                         message:
                           "El nombre solo puede contener letras y espacios",
                       },
@@ -94,6 +137,31 @@ const RegisterStudent = () => {
                 {errors.curp && (
                   <ValidationMessage message={errors.curp.message} />
                 )}
+              </div>
+            </div>
+
+            <div className="sm:col-span-full">
+              <label className="block text-sm/6 font-medium text-white">
+                Número de Control
+              </label>
+              <div className="mt-2">
+                <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
+                  <input
+                    id="nc"
+                    type="text"
+                    maxLength={14}
+                    className="uppercase block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
+                    {...register("nc", {
+                      required: "Ingrese el Número de control del alumno",
+                      pattern: {
+                        value: /^23303050\d{6}$/,
+                        message:
+                          "El Número de control debe de tener el formato correcto",
+                      },
+                    })}
+                  />
+                </div>
+                {errors.nc && <ValidationMessage message={errors.nc.message} />}
               </div>
             </div>
 
@@ -345,29 +413,91 @@ const RegisterStudent = () => {
               </div>
             </div>
 
-            <div className="sm:col-span-full">
+            <div className="sm:col-span-3">
               <label className="block text-sm/6 font-medium text-white">
                 Condiciones Médicas
               </label>
               <div className="mt-2">
-                <textarea
+                <input
                   name="medicalConditions"
-                  id="medicalConditions"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                ></textarea>
+                  value={conditionInputValue}
+                  onChange={(e) => setConditionInputValue(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && addCondition()}
+                  className="block w-full mb-5 rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                />
+                <div className="flex flex-wrap gap-2">
+                  {conditionItems.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between w-full mb-5 rounded-md bg-slate-900 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                    >
+                      {item}
+                      <button
+                        type="button"
+                        className="hover:text-red-400 cursor-pointer"
+                        onClick={() =>
+                          setConditionItems(
+                            conditionItems.filter((_, i) => i !== index),
+                          )
+                        }
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={addCondition}
+                  type="button"
+                  className="rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                >
+                  Añadir Condición
+                </button>
               </div>
             </div>
 
-            <div className="sm:col-span-full">
+            <div className="sm:col-span-3">
               <label className="block text-sm/6 font-medium text-white">
                 Alergias a Medicamentos
               </label>
               <div className="mt-2">
-                <textarea
+                <input
                   name="allergies"
-                  id="allergies"
-                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
-                ></textarea>
+                  value={allergyInputValue}
+                  onChange={(e) => setAllergyInputValue(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && addAllergy()}
+                  className="block w-full mb-5 rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                />
+                <div className="flex flex-wrap gap-2">
+                  {allergyItems.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between w-full mb-5 rounded-md bg-slate-900 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                    >
+                      {item}
+                      <button
+                        type="button"
+                        className="hover:text-red-400 cursor-pointer"
+                        onClick={() =>
+                          setAllergyItems(
+                            allergyItems.filter((_, i) => i !== index),
+                          )
+                        }
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={addAllergy}
+                  type="button"
+                  className="rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                >
+                  Añadir Alergia
+                </button>
               </div>
             </div>
           </div>
@@ -392,7 +522,7 @@ const RegisterStudent = () => {
                     id="nameP"
                     type="text"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
-                    {...register("nameP", {
+                    {...register("emergencyContact.name", {
                       required:
                         "Ingrese el nombre completo del padre, madre o tutor",
                       pattern: {
@@ -403,8 +533,10 @@ const RegisterStudent = () => {
                     })}
                   />
                 </div>
-                {errors.nameP && (
-                  <ValidationMessage message={errors.nameP.message} />
+                {errors.emergencyContact?.name && (
+                  <ValidationMessage
+                    message={errors.emergencyContact.name.message}
+                  />
                 )}
               </div>
             </div>
@@ -420,7 +552,7 @@ const RegisterStudent = () => {
                     type="text"
                     maxLength={7}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
-                    {...register("relationship", {
+                    {...register("emergencyContact.relationship", {
                       required:
                         "Ingrese el parentesco del padre, madre o tutor",
                       pattern: {
@@ -431,8 +563,10 @@ const RegisterStudent = () => {
                     })}
                   />
                 </div>
-                {errors.relationship && (
-                  <ValidationMessage message={errors.relationship.message} />
+                {errors.emergencyContact?.relationship && (
+                  <ValidationMessage
+                    message={errors.emergencyContact.relationship.message}
+                  />
                 )}
               </div>
             </div>
@@ -448,7 +582,7 @@ const RegisterStudent = () => {
                     type="tel"
                     maxLength={10}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
-                    {...register("phone", {
+                    {...register("emergencyContact.phone", {
                       required: "Ingrese el número de teléfono de emergencia",
                       pattern: {
                         value: /^\d{10}$/,
@@ -458,8 +592,10 @@ const RegisterStudent = () => {
                     })}
                   />
                 </div>
-                {errors.phone && (
-                  <ValidationMessage message={errors.phone.message} />
+                {errors.emergencyContact?.phone && (
+                  <ValidationMessage
+                    message={errors.emergencyContact.phone.message}
+                  />
                 )}
               </div>
             </div>
@@ -475,7 +611,7 @@ const RegisterStudent = () => {
                     type="tel"
                     maxLength={10}
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
-                    {...register("phone2", {
+                    {...register("emergencyContact.phone2", {
                       pattern: {
                         value: /^\d{10}$/,
                         message:
@@ -484,8 +620,10 @@ const RegisterStudent = () => {
                     })}
                   />
                 </div>
-                {errors.phone2 && (
-                  <ValidationMessage message={errors.phone2.message} />
+                {errors.emergencyContact?.phone2 && (
+                  <ValidationMessage
+                    message={errors.emergencyContact.phone2.message}
+                  />
                 )}
               </div>
             </div>
@@ -500,7 +638,7 @@ const RegisterStudent = () => {
                     id="emailP"
                     type="email"
                     className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6"
-                    {...register("emailP", {
+                    {...register("emergencyContact.emailP", {
                       pattern: {
                         value:
                           /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -510,8 +648,10 @@ const RegisterStudent = () => {
                     })}
                   />
                 </div>
-                {errors.emailP && (
-                  <ValidationMessage message={errors.emailP.message} />
+                {errors.emergencyContact?.emailP && (
+                  <ValidationMessage
+                    message={errors.emergencyContact.emailP.message}
+                  />
                 )}
               </div>
             </div>
