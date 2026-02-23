@@ -3,30 +3,31 @@ import Students from "../../services/students";
 import ValidationMessage from "../../components/ui/ValidationMessage";
 
 const StudentsTable = () => {
+  const [table, setTable] = useState([]);
+  const [serverError, setServerError] = useState("");
 
-    const [table, setTable] = useState([]);
-    const [serverError, setServerError] = useState("");
+  useEffect(() => {
+    LoadTable();
+  }, []);
 
-    useEffect(() => {
-        LoadTable();
-    }, []);
+  const LoadTable = async () => {
+    try {
+      const data = await Students();
+      setTable(data);
+    } catch (error) {
+      setServerError(error.message);
+    }
+  };
 
-    const LoadTable = async () =>{
-        try{
-            const data = await Students();
-            setTable(data);
-        }
-        catch(error){
-            setServerError(error.message);
-        }
-    };
-
-    return (
+  return (
     <div className="w-full overflow-hidden rounded-xl border border-slate-700 bg-slate-900 shadow-2xl">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-800/50 border-b border-slate-700">
+              <th className="px-6 py-4 text-sm font-semibold text-slate-300">
+                Alumno
+              </th>
               <th className="px-6 py-4 text-sm font-semibold text-slate-300">
                 Número de Control
               </th>
@@ -42,12 +43,21 @@ const StudentsTable = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800">
-            {serverError && <ValidationMessage message={serverError}/>}
+            {serverError && <ValidationMessage message={serverError} />}
             {table.map((student) => (
               <tr
                 key={student.nc}
                 className="hover:bg-slate-800/30 transition-colors group"
               >
+                <td className="px-6 py-4 text-sm text-slate-500 font-mono">
+                  <div className="h-15 w-15 overflow-hidden rounded-full border-2 border-gray-200">
+                    <img
+                      src={student.img}
+                      alt="Perfil"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                </td>
                 <td className="px-6 py-4 text-sm text-slate-500 font-mono">
                   {student.nc}
                 </td>

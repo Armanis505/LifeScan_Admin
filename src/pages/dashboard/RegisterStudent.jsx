@@ -450,7 +450,7 @@ const RegisterStudent = () => {
                 <button
                   onClick={addCondition}
                   type="button"
-                  className="rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                  className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors cursor-pointer"
                 >
                   Añadir Condición
                 </button>
@@ -494,7 +494,7 @@ const RegisterStudent = () => {
                 <button
                   onClick={addAllergy}
                   type="button"
-                  className="rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                  className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors cursor-pointer"
                 >
                   Añadir Alergia
                 </button>

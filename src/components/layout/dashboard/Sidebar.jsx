@@ -10,7 +10,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: "Tabla de Alumnos", path: "/students-table", icon: Users },
     { name: "Registrar Alumno", path: "/register-student", icon: UserPen },
-    { name: "Historial de escaneos", path: "/history", icon: ClipboardList },
+    // { name: "Historial de escaneos", path: "/history", icon: ClipboardList },
   ];
 
   const handleLogout = () => {
@@ -54,14 +54,14 @@ const Sidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-slate-800">
-        <Link
+        {/* <Link
           key={"Settings"}
           to="/settings"
           className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-400 hover:bg-blue-400/10 rounded-xl transition-colors"
         >
           <Settings size={20} />
           <span className="font-medium">Ajustes</span>
-        </Link>
+        </Link> */}
 
         <button
           type="submit"
